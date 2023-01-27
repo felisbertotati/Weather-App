@@ -29,7 +29,6 @@ function convertToCoords(userSearch) {
     url: coordsURL,
     method: "GET",
   }).then(function (response) {
-    console.log(response);
     cityQuery = response[0].name;
     var lat = response[0].lat;
 
@@ -45,6 +44,7 @@ function getCurrWeather(lat, lon) {
     url: currURL,
     method: "GET",
   }).then(function (response) {
+    console.log(response);
     displayCurrWeather(response);
   });
 }
@@ -53,12 +53,12 @@ function displayCurrWeather(weather) {
   var todaySection = $("#today");
 
   var card = $("<div>")
-    .addClass("bg-dark card ")
+    .addClass("border border-secondary  card ")
     .css({ width: "60rem", height: "10rem" });
 
   todaySection.append(card);
 
-  var list = $("<ul>");
+  var list = $("<ul>").addClass("list-unstyled");
 
   card.append(list);
 
@@ -66,24 +66,24 @@ function displayCurrWeather(weather) {
   var city = cityQuery;
   cityItem.text(city);
 
-  // var tempItem = $("<li>");
-  // var celsiusTemperature = Math.floor(response.main.temp - 273.15);
-  // tempItem.text(celsiusTemperature);
+  var tempItem = $("<li>");
+  var celsiusTemperature = weather.current.temp;
+  tempItem.text(celsiusTemperature);
 
-  // var windItem = $("<li>");
-  // var wind = response.wind.speed;
-  // windItem.text(wind);
+  var windItem = $("<li>");
+  var wind = weather.current.wind_speed;
+  windItem.text(wind);
 
-  // var humidityItem = $("<li>");
-  // var humidity = response.main.humidity;
-  // humidityItem.text(humidity);
+  var humidityItem = $("<li>");
+  var humidity = weather.current.humidity;
+  humidityItem.text(humidity);
   // console.log(humidity);
 
   list.append(cityItem);
 
-  // list.append(tempItem);
+  list.append(tempItem);
 
-  // list.append(windItem);
+  list.append(windItem);
 
-  // list.append(humidityItem);
+  list.append(humidityItem);
 }
