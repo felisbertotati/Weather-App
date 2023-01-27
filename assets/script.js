@@ -57,30 +57,39 @@ function displayCurrWeather(weather) {
     .css({ width: "60rem", height: "10rem" });
 
   todaySection.append(card);
+  var icon = $("<img>");
+  icon.attr(
+    "scr",
 
-  var list = $("<ul>").addClass("list-unstyled");
+    "https://openweathermap.org/img/wn/10d@2x.png"
+  );
+
+  //icon.css({ width: "200px", height: "200px", "object-fit": "contain" });
+
+  var list = $("<ul>").addClass("list-unstyled pl-5");
 
   card.append(list);
 
-  var cityItem = $("<li>");
+  var cityItem = $("<li>").addClass("h2");
   var city = cityQuery;
   cityItem.text(city);
 
   var tempItem = $("<li>");
   var celsiusTemperature = weather.current.temp;
-  tempItem.text(celsiusTemperature);
+  tempItem.text("Temp: " + celsiusTemperature + "°C");
 
   var windItem = $("<li>");
   var wind = weather.current.wind_speed;
-  windItem.text(wind);
+  windItem.text("wind: " + wind + " m/s");
 
   var humidityItem = $("<li>");
   var humidity = weather.current.humidity;
-  humidityItem.text(humidity);
+  humidityItem.text("humidity: " + humidity + "%");
   // console.log(humidity);
 
-  list.append(cityItem);
+  cityItem.append(icon);
 
+  list.append(cityItem);
   list.append(tempItem);
 
   list.append(windItem);
