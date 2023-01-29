@@ -17,6 +17,7 @@ function getCity(e) {
   } else {
     console.log("Hello world");
   }
+  $("#search-input").val("");
 }
 // added evente in a search button
 $("#search-button").on("click", getCity);
@@ -64,11 +65,16 @@ function displayCurrWeather(weather) {
 
   // section today, I create a dinamically div
   var card = $("<div>")
-    .addClass(" card ")
-    .css({ width: "60rem", height: "20rem" });
+    .addClass(" card border border-info")
+    .css({ width: "60rem", height: "300px" });
 
   // section forcast, I created other section for focast
   var cardEl = $("<div>").addClass(" d-flex space-between ");
+
+  var paragraph = $("<h3>");
+  paragraph.text("5-Day Forecast");
+
+  forecastSection.append(paragraph);
   // forercast section will append to the cardEl
   forecastSection.append(cardEl);
 
@@ -80,7 +86,7 @@ function displayCurrWeather(weather) {
   icon.attr(
     "src",
 
-    `http://openweathermap.org/img/wn/${weather.current.weather[0].icon}.png`
+    `http://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`
   );
 
   //icon.css({ width: "200px", height: "200px", "object-fit": "contain" });
@@ -92,21 +98,21 @@ function displayCurrWeather(weather) {
   card.append(list);
 
   // city
-  var cityItem = $("<li>").addClass("h2");
+  var cityItem = $("<li>").addClass("h2 pb-4");
   // fetch from the API the city user will saerch
   var city = cityQuery;
   // Will show the city
   cityItem.text(city + " (" + formatDate + ")");
 
   //temperature
-  var tempItem = $("<li>");
+  var tempItem = $("<li>").addClass("pb-2");
   // fech from the API the temperature
   var celsiusTemperature = weather.current.temp;
   // will show the temperature in celsios
   tempItem.text("Temp: " + celsiusTemperature + "°C");
 
   // wind
-  var windItem = $("<li>");
+  var windItem = $("<li>").addClass("pb-2");
   // fech from the API the wind
   var wind = weather.current.wind_speed;
   // will show the temperatue in m/s
@@ -132,7 +138,7 @@ function displayCurrWeather(weather) {
   for (var i = 0; i < 5; i++) {
     var listForcast = $("<ul>")
       .addClass("list-unstyled card mr-5 bg-info")
-      .css({ height: "300px", padding: "24px" });
+      .css({ height: "250px", padding: "24px" });
     cardEl.append(listForcast);
 
     // access to the object and take the date
@@ -186,22 +192,31 @@ function saveWeather(search) {
 }
 
 function lastHistory() {
-  var searchHistory = $("<div>").css({
+  $("#history").css({
     display: "flex",
     "flex-direction": "column",
   });
+  var clearButton = $("<button>");
+  clearButton.text("Clear History").addClass(" btn btn-info mb-2");
 
+  citySearch.splice(10);
   citySearch.forEach((element) => {
     var searchLi = $("<button>")
       .text(element)
-      .addClass("btn btn-outline-info mb-2");
+      .addClass("btn btn-outline-info mb-2 ");
     searchLi.on("click", function () {
       var value = $(this).text();
       convertToCoords(value);
     });
-    searchHistory.append(searchLi);
+    $("#history").prepend(clearButton);
+    $("#history").append(searchLi);
   });
-  $("#history").append(searchHistory);
+
+  clearButton.on("click", function () {
+    localStorage.clear();
+    $("#history button").remove();
+    citySearch = [];
+  });
 }
 
 lastHistory();
