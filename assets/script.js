@@ -47,8 +47,9 @@ function getCurrWeather(lat, lon) {
 }
 
 function displayCurrWeather(weather) {
-  var todaySection = $("#today");
-  var forecastSection = $("#forecast");
+  var todaySection = $("#today").empty();
+
+  var forecastSection = $("#forecast").empty();
 
   // section today, I create a dinamically div
   var card = $("<div>")
@@ -57,7 +58,7 @@ function displayCurrWeather(weather) {
 
   // section forcast, I created other section for focast
   var cardEl = $("<div>")
-    .addClass("border border-secondary  card ")
+    .addClass(" d-flex ")
     .css({ width: "60rem", height: "10rem" });
 
   // forercast section will append to the cardEl
@@ -78,7 +79,7 @@ function displayCurrWeather(weather) {
 
   //Today section
   // created a ul list, so that i can storage the weather informattion like city, wind, temp etc..
-  var list = $("<ul>").addClass("list-unstyled pl-5");
+  var list = $("<ul>").addClass("list-unstyled pl-5 ");
   //this list will append to a today card
   card.append(list);
 
@@ -110,7 +111,7 @@ function displayCurrWeather(weather) {
   // will show the humidity in %
   humidityItem.text("humidity: " + humidity + "%");
   // console.log(humidity);
-
+  todaySection.innerHTML = "";
   // this part will make sure all of the list will show in the screen
   list.append(cityItem);
   list.append(icon);
@@ -119,16 +120,26 @@ function displayCurrWeather(weather) {
   list.append(humidityItem);
 
   //Forecast Div
+  for (var i = 0; i < 6; i++) {
+    var listForcast = $("<ul>").addClass("list-unstyled pl-5 card bg-info");
+    cardEl.append(listForcast);
+
+    //added temperature in the list
+    var tempForecast = $("<li>");
+    var tempForecastEl = weather.daily[i].temp.day;
+    tempForecast.text("Temp: " + tempForecastEl + "°C");
+    listForcast.append(tempForecast);
+    console.log(weather.daily[i].temp.day);
+
+    var windForecast = $("<li>");
+    var windForecastEl = weather.daily[i].wind_speed;
+    windForecast.text("wind: " + windForecastEl + " m/s");
+    listForcast.append(windForecast);
+    console.log(weather.daily[i].wind_speed);
+
+    var humidityForecast = $("<li>");
+    var humidityForecastEl = weather.daily[i].humidity;
+    humidityForecast.text("humidity: " + humidityForecastEl + "%");
+    listForcast.append(humidityForecast);
+  }
 }
-
-// function DisplayFiveDays(daily) {
-//   //html id forecats
-//   var dailyWeather = $("#forecast");
-
-//   //created a bootstrap card and after I append to the forecast ID
-//   var cardEl = $("<div>");
-//   // .addClass("card bg-info")
-//   // .css({ width: "18rem", height: "20rem" });
-
-//   dailyWeather.append(cardEl);
-// }
