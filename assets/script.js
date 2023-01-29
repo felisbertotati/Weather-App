@@ -52,20 +52,23 @@ function getCurrWeather(lat, lon) {
 }
 
 function displayCurrWeather(weather) {
+  // access to the object and take the date
+  var date = weather.current.dt;
+
+  // use moment to convert the date
+  var formatDate = moment.unix(date).format("DD/MM/YYYY");
+
   var todaySection = $("#today").empty();
 
   var forecastSection = $("#forecast").empty();
 
   // section today, I create a dinamically div
   var card = $("<div>")
-    .addClass("border border-secondary  card ")
+    .addClass(" card ")
     .css({ width: "60rem", height: "20rem" });
 
   // section forcast, I created other section for focast
-  var cardEl = $("<div>")
-    .addClass(" d-flex ")
-    .css({ width: "60rem", height: "10rem" });
-
+  var cardEl = $("<div>").addClass(" d-flex space-between ");
   // forercast section will append to the cardEl
   forecastSection.append(cardEl);
 
@@ -77,10 +80,9 @@ function displayCurrWeather(weather) {
   icon.attr(
     "src",
 
-    " http://openweathermap.org/img/wn/10d@2x.png"
+    `http://openweathermap.org/img/wn/${weather.current.weather[0].icon}.png`
   );
 
-  console.log(icon);
   //icon.css({ width: "200px", height: "200px", "object-fit": "contain" });
 
   //Today section
@@ -94,7 +96,7 @@ function displayCurrWeather(weather) {
   // fetch from the API the city user will saerch
   var city = cityQuery;
   // Will show the city
-  cityItem.text(city);
+  cityItem.text(city + " (" + formatDate + ")");
 
   //temperature
   var tempItem = $("<li>");
@@ -120,31 +122,48 @@ function displayCurrWeather(weather) {
   todaySection.innerHTML = "";
   // this part will make sure all of the list will show in the screen
   list.append(cityItem);
+
   list.append(icon);
   list.append(tempItem);
   list.append(windItem);
   list.append(humidityItem);
 
   //Forecast Div
-  for (var i = 0; i < 6; i++) {
-    var listForcast = $("<ul>").addClass(
-      "list-unstyled pl-5 card mr-4 bg-info"
-    );
+  for (var i = 0; i < 5; i++) {
+    var listForcast = $("<ul>")
+      .addClass("list-unstyled card mr-5 bg-info")
+      .css({ height: "300px", padding: "24px" });
     cardEl.append(listForcast);
 
+    // access to the object and take the date
+    // use moment to convert the date
+    var dailyDate = $("<li>");
+    var dateEl = weather.daily[i].dt;
+    var formatDateEl = moment.unix(dateEl).format("DD/MM/YYYY");
+    dailyDate.text(formatDateEl);
+    listForcast.append(dailyDate);
+
+    var iconEl = $("<img>");
+    iconEl.attr(
+      "src",
+
+      `http://openweathermap.org/img/wn/${weather.daily[i].weather[0].icon}.png`
+    );
+
+    listForcast.append(iconEl);
     //added temperature in the list
     var tempForecast = $("<li>");
     var tempForecastEl = weather.daily[i].temp.day;
     tempForecast.text("Temp: " + tempForecastEl + "°C");
     listForcast.append(tempForecast);
     console.log(weather.daily[i].temp.day);
-
+    //added wind
     var windForecast = $("<li>");
     var windForecastEl = weather.daily[i].wind_speed;
     windForecast.text("wind: " + windForecastEl + " m/s");
     listForcast.append(windForecast);
     console.log(weather.daily[i].wind_speed);
-
+    //added humidity
     var humidityForecast = $("<li>");
     var humidityForecastEl = weather.daily[i].humidity;
     humidityForecast.text("humidity: " + humidityForecastEl + "%");
