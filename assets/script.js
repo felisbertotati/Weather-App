@@ -167,11 +167,20 @@ function saveWeather(search) {
 }
 
 function lastHistory() {
-  var searchHistory = $("<ul>");
+  var searchHistory = $("<div>").css({
+    display: "flex",
+    "flex-direction": "column",
+  });
+
   citySearch.forEach((element) => {
-    var searchLi = $("<li>").text(element);
+    var searchLi = $("<button>")
+      .text(element)
+      .addClass("btn btn-outline-info mb-2");
+    searchLi.on("click", function () {
+      var value = $(this).text();
+      convertToCoords(value);
+    });
     searchHistory.append(searchLi);
-    console.log(element);
   });
   $("#history").append(searchHistory);
 }
