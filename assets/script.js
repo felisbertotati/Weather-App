@@ -2,6 +2,8 @@ var APIkey = "c828ba608f878d909ac2c8a1fd874157";
 var queryURL = "https://api.openweathermap.org/";
 var cityQuery;
 
+var citySearch = JSON.parse(localStorage.getItem("search")) || [];
+
 function getCity(e) {
   //prevent default in the function
   e.preventDefault();
@@ -27,6 +29,9 @@ function convertToCoords(userSearch) {
     method: "GET",
   }).then(function (response) {
     cityQuery = response[0].name;
+
+    saveWeather(response[0].name);
+
     var lat = response[0].lat;
 
     var lon = response[0].lon;
@@ -54,7 +59,7 @@ function displayCurrWeather(weather) {
   // section today, I create a dinamically div
   var card = $("<div>")
     .addClass("border border-secondary  card ")
-    .css({ width: "60rem", height: "10rem" });
+    .css({ width: "60rem", height: "20rem" });
 
   // section forcast, I created other section for focast
   var cardEl = $("<div>")
@@ -70,11 +75,12 @@ function displayCurrWeather(weather) {
   // icon section
   var icon = $("<img>");
   icon.attr(
-    "scr",
+    "src",
 
-    "https://openweathermap.org/img/wn/10d@2x.png"
+    " http://openweathermap.org/img/wn/10d@2x.png"
   );
 
+  console.log(icon);
   //icon.css({ width: "200px", height: "200px", "object-fit": "contain" });
 
   //Today section
@@ -121,7 +127,9 @@ function displayCurrWeather(weather) {
 
   //Forecast Div
   for (var i = 0; i < 6; i++) {
-    var listForcast = $("<ul>").addClass("list-unstyled pl-5 card bg-info");
+    var listForcast = $("<ul>").addClass(
+      "list-unstyled pl-5 card mr-4 bg-info"
+    );
     cardEl.append(listForcast);
 
     //added temperature in the list
@@ -143,3 +151,29 @@ function displayCurrWeather(weather) {
     listForcast.append(humidityForecast);
   }
 }
+
+function saveWeather(search) {
+  console.log(search);
+  var duplicate = citySearch.find((item) => search == item);
+
+  if (duplicate) {
+    return;
+  } else {
+    citySearch.unshift(search);
+    $("#history").empty();
+    localStorage.setItem("search", JSON.stringify(citySearch));
+    lastHistory();
+  }
+}
+
+function lastHistory() {
+  var searchHistory = $("<ul>");
+  citySearch.forEach((element) => {
+    var searchLi = $("<li>").text(element);
+    searchHistory.append(searchLi);
+    console.log(element);
+  });
+  $("#history").append(searchHistory);
+}
+
+lastHistory();
