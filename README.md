@@ -36,3 +36,8 @@ to create this application I have to follow the instructions:
  
  ## Preview
  
+  ![alt text](https://github.com/felisbertotati/Weather-App/blob/main/assets/Images/_D__bootcamp_student_Weather-App_index.html%20(1).png?raw=true)
+  
+   ![alt text](https://github.com/felisbertotati/Weather-App/blob/main/assets/Images/_D__bootcamp_student_Weather-App_index.html.png?raw=true)
+  
+  
