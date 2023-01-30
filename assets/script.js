@@ -23,31 +23,36 @@ function getCity(e) {
 $("#search-button").on("click", getCity);
 
 function convertToCoords(userSearch) {
+  //call from the API the coords
   var coordsURL = `${queryURL}geo/1.0/direct?q=${userSearch}&limit=5&appid=${APIkey}`;
   // created an AJAX call
   $.ajax({
     url: coordsURL,
     method: "GET",
   }).then(function (response) {
+    // fetch the name of the city
     cityQuery = response[0].name;
-
+    // after same in the saveWeathe function
     saveWeather(response[0].name);
 
+    // var latitude
     var lat = response[0].lat;
 
+    // var longitude
     var lon = response[0].lon;
-
+    // after save in the function getCurrWeather
     getCurrWeather(lat, lon);
   });
 }
 
 function getCurrWeather(lat, lon) {
+  // call from the API lat and lon to retrive the current weather
   var currURL = `${queryURL}data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=${APIkey}&units=metric`;
   $.ajax({
     url: currURL,
     method: "GET",
   }).then(function (response) {
-    console.log(response);
+    // we will pass the results to the displayCurrWeather function
     displayCurrWeather(response);
   });
 }
@@ -59,6 +64,7 @@ function displayCurrWeather(weather) {
   // use moment to convert the date
   var formatDate = moment.unix(date).format("DD/MM/YYYY");
 
+  //call id today  and forecats from Html
   var todaySection = $("#today").empty();
 
   var forecastSection = $("#forecast").empty();
@@ -71,6 +77,7 @@ function displayCurrWeather(weather) {
   // section forcast, I created other section for focast
   var cardEl = $("<div>").addClass(" d-flex space-between ");
 
+  // create a paagraph
   var paragraph = $("<h3>");
   paragraph.text("5-Day Forecast");
 
@@ -83,6 +90,7 @@ function displayCurrWeather(weather) {
 
   // icon section
   var icon = $("<img>");
+  // call the API the icon
   icon.attr(
     "src",
 
@@ -177,13 +185,16 @@ function displayCurrWeather(weather) {
   }
 }
 
+// this var makes that user when search doesn't duplicate the items
 function saveWeather(search) {
   console.log(search);
+
   var duplicate = citySearch.find((item) => search == item);
 
   if (duplicate) {
     return;
   } else {
+    //last search will show on the top
     citySearch.unshift(search);
     $("#history").empty();
     localStorage.setItem("search", JSON.stringify(citySearch));
@@ -196,10 +207,12 @@ function lastHistory() {
     display: "flex",
     "flex-direction": "column",
   });
+  //created dynamically buttons
   var clearButton = $("<button>");
   clearButton.text("Clear History").addClass(" btn btn-info mb-2");
-
+  // the search only can have untill 10 searchs
   citySearch.splice(10);
+
   citySearch.forEach((element) => {
     var searchLi = $("<button>")
       .text(element)
@@ -212,6 +225,7 @@ function lastHistory() {
     $("#history").append(searchLi);
   });
 
+  // added a clear button. if user would like to clean his history
   clearButton.on("click", function () {
     localStorage.clear();
     $("#history button").remove();
