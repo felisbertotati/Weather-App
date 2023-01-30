@@ -33,6 +33,10 @@ to create this application I have to follow the instructions:
     - The humidity
 
  * When a user clicks on a city in the search history they are again presented with current and future conditions for that city.
+
+ ## Tools
+  ![alt text](https://github.com/felisbertotati/Weather-App/blob/main/assets/Images/icons8-bootstrap-48.png?raw=true)  ![alt text](https://github.com/felisbertotati/Weather-App/blob/main/assets/Images/icons8-html-5-48.png?raw=true) ![alt text](https://github.com/felisbertotati/Weather-App/blob/main/assets/Images/icons8-javascript-48.png?raw=true) ![alt text](https://github.com/felisbertotati/Weather-App/blob/main/assets/Images/icons8-jquery-is-a-javascript-library-designed-to-simplify-html-25.png?raw=true)
+
  
  ## Preview
  
